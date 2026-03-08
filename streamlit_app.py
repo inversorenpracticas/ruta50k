@@ -55,8 +55,8 @@ col_l, col_r = st.columns([1, 1])
 with col_l:
     if os.path.exists("logo.png"):
         st.image("logo.png", width=120)
-    elif os.path.exists("logo.jpg"):
-        st.image("logo.jpg", width=120)
+    elif os.path.exists("logo.png"):
+        st.image("logo.png", width=120)
     else:
         # Si falla el archivo local, usamos tu link de Drive como respaldo (entre comillas)
         st.image("https://drive.google.com/uc?export=view&id=1l6Iw1f7-sDlMcEAkocHznItSbDIGIoWt", width=120)
