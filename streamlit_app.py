@@ -4,107 +4,138 @@ import numpy as np
 import plotly.graph_objects as go
 
 # Configuración de página
-st.set_page_config(page_title="Simulador Ruta 50k", layout="wide")
+st.set_page_config(page_title="Ruta 50k - VIP", layout="wide")
 
-# Estética Inversor en Prácticas (Dark Tech & Neón)
+# CSS AVANZADO: Efectos de relieve, neón y cristal
 st.markdown("""
     <style>
-    .main { background-color: #0b1016; color: #e0e0e0; }
-    .stSlider > div > div > div > div { background: linear-gradient(90deg, #00ffcc, #00ccff); }
-    h1 { color: #00ffcc; text-shadow: 0 0 15px #00ffcc; font-family: 'Courier New'; }
-    .metric-card { 
-        background: #1a1f26; 
-        border: 1px solid #00ffcc; 
-        padding: 20px; 
-        border-radius: 15px; 
-        text-align: center;
-        box-shadow: 0 0 20px rgba(0,255,204,0.1);
+    .main { 
+        background-color: #0d1117; 
+        background-image: radial-gradient(circle at 50% 50%, #161b22 0%, #0d1117 100%);
+        color: #e6edf3; 
     }
-    .highlight-green { color: #00ffcc; font-weight: bold; font-size: 24px; }
+    /* Tarjetas con relieve y brillo neón */
+    .metric-card { 
+        background: rgba(22, 27, 34, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 255, 204, 0.3);
+        padding: 25px; 
+        border-radius: 20px; 
+        text-align: center;
+        box-shadow: 10px 10px 20px rgba(0,0,0,0.5), -5px -5px 15px rgba(255,255,255,0.02), 0 0 15px rgba(0,255,204,0.1);
+        margin-bottom: 20px;
+    }
+    h1 { 
+        font-family: 'Orbitron', sans-serif;
+        color: #00ffcc; 
+        text-shadow: 2px 2px 4px #000, 0 0 20px rgba(0,255,204,0.6); 
+        font-weight: 800;
+        letter-spacing: 2px;
+    }
+    .highlight-val { 
+        font-size: 32px; 
+        font-weight: bold; 
+        color: #00ffcc; 
+        text-shadow: 0 0 10px rgba(0,255,204,0.5); 
+    }
+    /* Estilo para el Sidebar */
+    [data-testid="stSidebar"] {
+        background-color: #161b22;
+        border-right: 1px solid #00ffcc;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("⚡ RUTA 50K: TU MÁQUINA DE INTERÉS COMPUESTO")
-st.markdown("### Herramienta oficial de @InversorEnPrácticas")
+# --- ENCABEZADO CON LOGO ---
+# Si tienes una URL de tu logo (ej: de tu Instagram o web), ponla aquí:
+LOGO_URL = "https://drive.google.com/uc?export=view&id=1l6Iw1f7-sDlMcEAkocHznItSbDIGIoWt" 
+
+col_logo, col_tit = st.columns([1, 4])
+with col_logo:
+    # Si no tienes URL, esto pondrá un icono temporal
+    st.markdown("## 🚀") 
+with col_tit:
+    st.title("RUTA 50K: CALCULADORA PRO")
+    st.markdown("#### Propiedad de @InversorEnPrácticas")
+
 st.write("---")
 
-# --- SIDEBAR: CONFIGURACIÓN ---
-st.sidebar.header("🕹️ CONFIGURACIÓN")
-cap_inicial = st.sidebar.number_input("Capital Inicial (€)", value=0, step=100)
-aporte_base = st.sidebar.slider("Aporte mensual base (€)", 50, 1000, 250)
-aporte_extra = st.sidebar.slider("🚀 Aporte extra (Efecto Café) (€)", 0, 500, 0)
-anios_vista = st.sidebar.slider("Años de proyección", 1, 30, 10)
+# --- SIDEBAR (CONTROLADORES) ---
+st.sidebar.header("⚙️ PANEL DE CONTROL")
+st.sidebar.info("Pulsa la flecha arriba si estás en móvil para ver los ajustes.")
+
+cap_inicial = st.sidebar.number_input("Capital Inicial (€)", value=0)
+aporte_base = st.sidebar.slider("Aporte mensual base (€)", 50, 2000, 250)
+aporte_extra = st.sidebar.slider("🔥 Aporte Extra Mensual (€)", 0, 1000, 0)
+anios_vista = st.sidebar.slider("Años de inversión", 1, 35, 10)
 
 total_mensual = aporte_base + aporte_extra
 
-# Rentabilidades según tu guía (Búnker ~12%, Cohete ~25%+)
-ret_bunker = st.sidebar.slider("Zona Segura (Búnker)", 5, 15, 12)
-ret_cohete = st.sidebar.slider("Zona Explosiva (Cohete)", 10, 60, 25)
+# Rentabilidades
+st.sidebar.subheader("Rentabilidad Anual")
+ret_bunker = st.sidebar.slider("Búnker (%)", 5, 15, 12)
+ret_cohete = st.sidebar.slider("Cohete (%)", 10, 80, 25)
 
-# [span_0](start_span)[span_1](start_span)Distribución: 130€ (52%) Búnker, 120€ (48%) Cohete[span_0](end_span)[span_1](end_span)
-p_bunker, p_cohete = 0.52, 0.48
-ret_ponderado = (ret_bunker * p_bunker + ret_cohete * p_cohete) / 100
-r_mensual = (1 + ret_ponderado)**(1/12) - 1
+# [span_1](start_span)[span_2](start_span)Lógica (52% Búnker, 48% Cohete)[span_1](end_span)[span_2](end_span)
+r_ponderado = (ret_bunker * 0.52 + ret_cohete * 0.48) / 100
+r_mensual = (1 + r_ponderado)**(1/12) - 1
 meses = anios_vista * 12
 
-# Simulación mes a mes
-datos = []
+# Simulación
 saldo = cap_inicial
-total_invertido_acum = cap_inicial
-
+invertido = cap_inicial
+data = []
 for m in range(1, meses + 1):
     saldo = (saldo + total_mensual) * (1 + r_mensual)
-    total_invertido_acum += total_mensual
+    invertido += total_mensual
     if m % 12 == 0:
-        datos.append({
-            "Año": m // 12, 
-            "Capital Total": round(saldo, 2),
-            "Tu Dinero": round(total_invertido_acum, 2),
-            "Intereses": round(saldo - total_invertido_acum, 2)
-        })
+        data.append({"Año": m//12, "Total": saldo, "Invertido": invertido, "Interés": saldo - invertido})
 
-df = pd.DataFrame(datos)
-final_total = df["Capital Total"].iloc[-1]
-final_invertido = df["Tu Dinero"].iloc[-1]
-final_intereses = df["Intereses"].iloc[-1]
+df = pd.DataFrame(data)
 
-# --- VISUALIZACIÓN ---
-col_stats, col_pie = st.columns([1, 1])
+# --- CUERPO PRINCIPAL ---
+c1, c2 = st.columns(2)
 
-with col_stats:
+with c1:
     st.markdown(f"""
     <div class="metric-card">
-        <h4>RESULTADO A {anios_vista} AÑOS</h4>
-        <h2 style="color: #00ffcc;">{final_total:,.2f}€</h2>
-        <p>Tu inversión: <span style="color: #00ccff;">{final_invertido:,.0f}€</span></p>
-        <p>Dinero "Gratis": <span class="highlight-green">{final_intereses:,.0f}€</span></p>
+        <p style="font-size: 18px;">PATRIMONIO FINAL</p>
+        <p class="highlight-val">{df['Total'].iloc[-1]:,.2f}€</p>
+        <p style="color: #00ccff;">Tu ahorro: {df['Invertido'].iloc[-1]:,.0f}€</p>
     </div>
     """, unsafe_allow_html=True)
-    
-    # [span_2](start_span)[span_3](start_span)Meta 50k[span_2](end_span)[span_3](end_span)
-    meta = 50000
-    s_meta, m_meta = cap_inicial, 0
-    while s_meta < meta and m_meta < 600:
-        s_meta = (s_meta + total_mensual) * (1 + r_mensual)
-        m_meta += 1
-    
-    st.write("")
-    st.success(f"🎯 **Meta 50k:** Llegarás a los 50.000€ en **{m_meta//12} años y {m_meta%12} meses**.")
 
-with col_pie:
-    fig_pie = go.Figure(data=[go.Pie(
-        labels=['Tu Esfuerzo', 'Intereses'],
-        values=[final_invertido, final_intereses],
-        hole=.6,
-        marker=dict(colors=['#00ccff', '#00ffcc']),
-        textinfo='percent'
-    )])
-    fig_pie.update_layout(showlegend=True, paper_bgcolor='rgba(0,0,0,0)', font=dict(color="#e0e0e0"), height=300)
-    st.plotly_chart(fig_pie, use_container_width=True)
+with c2:
+    ganancia = df['Total'].iloc[-1] - df['Invertido'].iloc[-1]
+    st.markdown(f"""
+    <div class="metric-card">
+        <p style="font-size: 18px;">DINERO "GRATIS"</p>
+        <p class="highlight-val" style="color: #00ffcc;">+{ganancia:,.2f}€</p>
+        <p style="color: #00ffcc;">Gracias al Interés Compuesto</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-# Gráfica Barras
+# Gráfica de Quesito (Relieve)
+fig_pie = go.Figure(data=[go.Pie(
+    labels=['Inversión Real', 'Interés Generado'],
+    values=[df['Invertido'].iloc[-1], df['Interés'].iloc[-1]],
+    hole=.7,
+    marker=dict(colors=['#00ccff', '#00ffcc'], line=dict(color='#0d1117', width=4))
+)])
+fig_pie.update_layout(showlegend=False, paper_bgcolor='rgba(0,0,0,0)', height=350, margin=dict(t=0, b=0, l=0, r=0))
+st.plotly_chart(fig_pie, use_container_width=True)
+
+# Gráfica de Barras Pro
 fig_bar = go.Figure()
-fig_bar.add_trace(go.Bar(x=df["Año"], y=df["Tu Dinero"], name="Inversión", marker_color='#00ccff'))
-fig_bar.add_trace(go.Bar(x=df["Año"], y=df["Intereses"], name="Interés Compuesto", marker_color='#00ffcc'))
+fig_bar.add_trace(go.Bar(x=df["Año"], y=df["Invertido"], name="Inversión", marker_color='#00ccff'))
+fig_bar.add_trace(go.Bar(x=df["Año"], y=df["Interés"], name="Intereses", marker_color='#00ffcc'))
 fig_bar.update_layout(barmode='stack', template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
 st.plotly_chart(fig_bar, use_container_width=True)
+
+# Meta 50k
+meta = 50000
+s_meta, m_meta = cap_inicial, 0
+while s_meta < meta and m_meta < 600:
+    s_meta = (s_meta + total_mensual) * (1 + r_mensual)
+    m_meta += 1
+st.info(f"🎯 **Hito Ruta 50k:** Alcanzarás tu objetivo en **{m_meta//12} años y {m_meta%12} meses**.")
