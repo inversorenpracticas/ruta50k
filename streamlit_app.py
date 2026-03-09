@@ -349,7 +349,7 @@ if st.session_state.planes:
 # ==========================================
 st.markdown(f"""
 <div class="disclaimer">
-    <strong>⚡ CLÁUSULA DE RESPONSABILIDAD:</strong><br><br>
+    <strong>⚠️ CLÁUSULA DE RESPONSABILIDAD:</strong><br><br>
     Esta herramienta es un simulador matemático basado en proyecciones y rentabilidades históricas. No garantiza resultados futuros. 
     El mercado es volátil y los precios pueden bajar drásticamente. La <strong>"Zona Cohete"</strong> es de alto riesgo.<br><br>
     Esto <strong>NO ES CONSEJO FINANCIERO</strong>. El usuario es el único responsable de sus decisiones y debe investigar por su cuenta antes de invertir dinero real.
