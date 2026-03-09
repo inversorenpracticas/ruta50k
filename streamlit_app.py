@@ -7,13 +7,18 @@ import os
 # 1. CONFIGURACIÓN DE PÁGINA
 st.set_page_config(page_title="Ruta 50k - Inversor PRO", layout="wide")
 
-# Nombre de tu archivo de logo en GitHub
+# Nombre de tu archivo de logo
 ARCHIVO_LOGO = "logo.png" 
 
-# 2. CSS AVANZADO: FONDO ANIMADO, FUENTES TECH Y RELIEVES
+# 2. CSS AVANZADO: UNIFICACIÓN TOTAL CON ORBITRON
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+    /* FUENTE GLOBAL PARA TODA LA APP */
+    html, body, [class*="css"], .stMarkdown, p, span, label, button, input, select, textarea {
+        font-family: 'Orbitron', sans-serif !important;
+    }
 
     /* Fondo animado con movimiento sutil */
     .main {
@@ -31,7 +36,7 @@ st.markdown("""
 
     /* Título Ultra Grande y Tech */
     .main-title {
-        font-family: 'Orbitron', sans-serif;
+        font-family: 'Orbitron', sans-serif !important;
         font-size: 3.5rem !important;
         font-weight: 900;
         color: #00ffcc;
@@ -41,7 +46,7 @@ st.markdown("""
         letter-spacing: 3px;
     }
 
-    /* Logo Centrado y Grande con Brillo */
+    /* Logo Centrado */
     .centered-logo {
         display: block;
         margin-left: auto;
@@ -65,7 +70,7 @@ st.markdown("""
     }
 
     .value-text {
-        font-family: 'Orbitron', sans-serif;
+        font-family: 'Orbitron', sans-serif !important;
         font-size: 42px;
         font-weight: bold;
         color: #00ffcc;
@@ -74,6 +79,7 @@ st.markdown("""
 
     /* Disclaimer estilizado */
     .disclaimer {
+        font-family: 'Orbitron', sans-serif !important;
         background: rgba(255, 0, 85, 0.1);
         border-left: 5px solid #ff0055;
         padding: 20px;
@@ -83,23 +89,26 @@ st.markdown("""
         margin-top: 40px;
     }
 
-    /* Sidebar Neón */
+    /* Sidebar Neón y Fuente */
     [data-testid="stSidebar"] {
         background-color: #0d1117;
         border-right: 3px solid #00ffcc;
     }
+    
+    [data-testid="stSidebar"] * {
+        font-family: 'Orbitron', sans-serif !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-# 3. CABECERA: LOGO CENTRADO Y TÍTULO GIGANTE
+# 3. CABECERA
 if os.path.exists(ARCHIVO_LOGO):
-    st.markdown(f'<img src="data:image/png;base64,{st.image(ARCHIVO_LOGO)}" class="centered-logo">', unsafe_allow_html=True)
+    st.image(ARCHIVO_LOGO, width=180) # Simplificado para evitar errores de renderizado HTML
 else:
-    # Si GitHub no lo carga directo, usamos el link de Drive como respaldo centrado
     st.markdown(f'<div style="text-align:center;"><img src="https://drive.google.com/uc?export=view&id=1l6Iw1f7-sDlMcEAkocHznItSbDIGIoWt" class="centered-logo"></div>', unsafe_allow_html=True)
 
 st.markdown('<h1 class="main-title">SIMULADOR RUTA 50K</h1>', unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #00ccff; font-weight: bold; letter-spacing: 2px;'>OPERATIVA OFICIAL @INVERSORENPRÁCTICAS</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #00ccff; font-weight: bold; letter-spacing: 2px; font-family: Orbitron;'>OPERATIVA OFICIAL @INVERSORENPRÁCTICAS</p>", unsafe_allow_html=True)
 
 # 4. PANEL DE CONTROL (SIDEBAR)
 st.sidebar.header("🕹️ CONTROL DE MISIÓN")
@@ -111,7 +120,7 @@ st.sidebar.subheader("Rendimiento Esperado (%)")
 r_bunker = st.sidebar.slider("Zona Búnker", 5, 20, 12)
 r_cohete = st.sidebar.slider("Zona Cohete", 10, 100, 25)
 
-# Lógica de la Guía: 130€ (52%) Búnker | 120€ (48%) Cohete [cite: 4, 26, 48]
+# Lógica de Inversión
 r_ponderada = (r_bunker * 0.52 + r_cohete * 0.48) / 100
 r_mensual = (1 + r_ponderada)**(1/12) - 1
 total_meses = anios * 12
@@ -128,31 +137,35 @@ for m in range(1, total_meses + 1):
 
 df = pd.DataFrame(data)
 
-# 5. RESULTADOS EN TARJETAS CRISTALINAS
+# 5. RESULTADOS EN TARJETAS
 col1, col2 = st.columns(2)
 with col1:
-    st.markdown(f'<div class="metric-card"><p style="color:#8b949e; letter-spacing:2px;">PATRIMONIO FINAL</p><p class="value-text">{df["Total"].iloc[-1]:,.2f}€</p><p style="color:#00ccff;">Aporte Real: {df["Tu Dinero"].iloc[-1]:,.0f}€</p></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="metric-card"><p style="color:#8b949e; letter-spacing:2px; font-family: Orbitron;">PATRIMONIO FINAL</p><p class="value-text">{df["Total"].iloc[-1]:,.2f}€</p><p style="color:#00ccff; font-family: Orbitron;">Aporte Real: {df["Tu Dinero"].iloc[-1]:,.0f}€</p></div>', unsafe_allow_html=True)
 with col2:
     regalo = df['Total'].iloc[-1] - df['Tu Dinero'].iloc[-1]
-    st.markdown(f'<div class="metric-card"><p style="color:#8b949e; letter-spacing:2px;">DINERO "GRATIS"</p><p class="value-text" style="color:#00ffcc;">+{regalo:,.2f}€</p><p style="color:#00ccff;">Interés Compuesto</p></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="metric-card"><p style="color:#8b949e; letter-spacing:2px; font-family: Orbitron;">DINERO "GRATIS"</p><p class="value-text" style="color:#00ffcc;">+{regalo:,.2f}€</p><p style="color:#00ccff; font-family: Orbitron;">Interés Compuesto</p></div>', unsafe_allow_html=True)
 
-# 6. GRÁFICAS DUALES
+# 6. GRÁFICAS
 st.write("---")
 col_pie, col_bar = st.columns([1, 2])
 
 with col_pie:
-    # Gráfico Donut
     fig_pie = go.Figure(data=[go.Pie(
         labels=['Tu Ahorro', 'Interés'],
         values=[df['Tu Dinero'].iloc[-1], df['Gratis'].iloc[-1]],
         hole=.75,
         marker=dict(colors=['#00ccff', '#00ffcc'], line=dict(color='#0d1117', width=5))
     )])
-    fig_pie.update_layout(showlegend=False, paper_bgcolor='rgba(0,0,0,0)', height=350, margin=dict(t=0, b=0, l=0, r=0))
+    fig_pie.update_layout(
+        showlegend=False, 
+        paper_bgcolor='rgba(0,0,0,0)', 
+        height=350, 
+        margin=dict(t=0, b=0, l=0, r=0),
+        font=dict(family="Orbitron") # Fuente en el gráfico
+    )
     st.plotly_chart(fig_pie, use_container_width=True)
 
 with col_bar:
-    # Gráfico de Barras Apiladas (Crecimiento Bola de Nieve) [cite: 94-95]
     fig_bar = go.Figure()
     fig_bar.add_trace(go.Bar(x=df["Año"], y=df["Tu Dinero"], name="Inversión Real", marker_color='#00ccff'))
     fig_bar.add_trace(go.Bar(x=df["Año"], y=df["Gratis"], name="Interés Acumulado", marker_color='#00ffcc'))
@@ -163,24 +176,24 @@ with col_bar:
         plot_bgcolor='rgba(0,0,0,0)',
         xaxis_title="Años de Evolución",
         yaxis_title="Capital Total (€)",
-        font=dict(family="Orbitron", size=12)
+        font=dict(family="Orbitron", size=12) # Fuente en el gráfico
     )
     st.plotly_chart(fig_bar, use_container_width=True)
 
-# Meta 50k
+# Proyección Meta
 meta = 50000
 s_meta, m_meta = cap_inicial, 0
 while s_meta < meta and m_meta < 600:
     s_meta = (s_meta + aporte_mensual) * (1 + r_mensual)
     m_meta += 1
-st.success(f"🎯 **PROYECCIÓN RUTA 50K:** Alcanzarás el hito de los 50.000€ en **{m_meta//12} años y {m_meta%12} meses** aportando {aporte_mensual}€/mes[cite: 3].")
 
-# 7. ADVERTENCIA LEGAL PERSONALIZADA
 st.markdown(f"""
-<div class="disclaimer">
-    <strong>⚡ CLÁUSULA DE RESPONSABILIDAD:</strong><br><br>
-    Esta herramienta es un simulador matemático basado en proyecciones y rentabilidades históricas [cite: 34, 55-58]. No garantiza resultados futuros. 
-    El mercado es volátil y los precios pueden bajar drásticamente. La <strong>"Zona Cohete"</strong> es de alto riesgo [cite: 48-49].<br><br>
-    Esto <strong>NO ES CONSEJO FINANCIERO</strong> [cite: 1-2]. El usuario es el único responsable de sus decisiones y debe investigar por su cuenta antes de invertir dinero real[cite: 2].
+<div style="background: rgba(0, 255, 204, 0.1); border: 1px solid #00ffcc; padding: 20px; border-radius: 15px; text-align: center; font-family: 'Orbitron';">
+    🎯 <strong>PROYECCIÓN RUTA 50K:</strong> Alcanzarás los 50.000€ en <strong>{m_meta//12} años y {m_meta%12} meses</strong>.
 </div>
 """, unsafe_allow_html=True)
+
+# 7. ADVERTENCIA LEGAL
+st.markdown(f"""
+<div class="disclaimer">
+    <strong>⚡ CLÁUSULA DE RESPONSABILIDAD:</strong><br><br
