@@ -4,88 +4,83 @@ import numpy as np
 import plotly.graph_objects as go
 import os
 
-# 1. CONFIGURACIÓN DE PÁGINA
-st.set_page_config(page_title="Ruta 50k - Inversor VIP", layout="wide")
+# 1. CONFIGURACIÓN Y NOMBRE DEL LOGO
+st.set_page_config(page_title="Ruta 50k - Simulador Oficial", layout="wide")
 
-# 2. ESTILO AVANZADO (Bisel y Relieve)
+# CAMBIA ESTO por el nombre exacto de tu archivo en GitHub
+ARCHIVO_LOGO = "logo.png" 
+
+# 2. ESTILO AVANZADO (Bisel, Neón y Disclaimer)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
-    
     .main { background-color: #0d1117; color: #e6edf3; }
     
-    /* Efecto Bisel y Relieve en Tarjetas */
     .metric-card {
         background: #161b22;
         border-radius: 20px;
         padding: 25px;
         text-align: center;
-        /* Sombra doble para crear relieve 3D */
         box-shadow: 10px 10px 20px #06080a, -5px -5px 15px #1c222d;
-        border: 1px solid rgba(0, 255, 204, 0.15);
+        border: 1px solid rgba(0, 255, 204, 0.2);
         margin-bottom: 25px;
     }
     
+    .disclaimer-box {
+        background: rgba(255, 0, 85, 0.05);
+        border: 1px solid #ff0055;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 13px;
+        color: #ffb3c1;
+        margin-top: 30px;
+    }
+
     h1 {
         font-family: 'Orbitron', sans-serif;
         color: #00ffcc;
-        text-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
+        text-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
         text-align: center;
-        margin-top: -20px;
     }
 
-    .value-text {
+    .highlight-val {
         font-size: 36px;
         font-weight: bold;
         color: #00ffcc;
-        margin: 10px 0;
-    }
-
-    /* Estilo del Panel Lateral */
-    [data-testid="stSidebar"] {
-        background-color: #0d1117;
-        border-right: 2px solid #00ffcc;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# 3. CABECERA CON LOGO (Método estable)
-# Intentamos cargar el logo desde GitHub. Si no lo has subido aún, pondrá un cohete.
-col_l, col_r = st.columns([1, 1])
-with col_l:
-    if os.path.exists("logo.png"):
-        st.image("logo.png", width=120)
-    elif os.path.exists("logo.png"):
-        st.image("logo.png", width=120)
+# 3. CABECERA Y LOGO
+col_a, col_b, col_c = st.columns([1, 2, 1])
+with col_b:
+    if os.path.exists(ARCHIVO_LOGO):
+        st.image(ARCHIVO_LOGO, width=150)
     else:
-        # Si falla el archivo local, usamos tu link de Drive como respaldo (entre comillas)
-        st.image("https://drive.google.com/uc?export=view&id=1l6Iw1f7-sDlMcEAkocHznItSbDIGIoWt", width=120)
+        st.warning(f"⚠️ Sube tu logo a GitHub con el nombre '{ARCHIVO_LOGO}'")
 
-st.title("ESTRATEGIA RUTA 50K")
-st.markdown("<p style='text-align: center; color: #8b949e;'>Herramienta de @InversorEnPrácticas</p>", unsafe_allow_html=True)
+st.title("SIMULADOR RUTA 50K")
+st.markdown("<p style='text-align: center; color: #8b949e;'>Por @InversorEnPrácticas</p>", unsafe_allow_html=True)
 
-# 4. PANEL DE CONTROL (AJUSTES)
-st.sidebar.header("🕹️ AJUSTES")
-st.sidebar.warning("Móvil: Pulsa el símbolo '>>' arriba a la izquierda para ver los ajustes.")
-
+# 4. PANEL DE CONTROL (SIDEBAR)
+st.sidebar.header("🕹️ AJUSTA TU ESTRATEGIA")
 cap_inicial = st.sidebar.number_input("Capital Inicial (€)", value=0, step=100)
-aporte_mensual = st.sidebar.slider("Aporte Mensual (€)", 50, 1500, 250)
-anios = st.sidebar.slider("Años de Inversión", 1, 30, 10)
+aporte_mensual = st.sidebar.slider("Tu inversión mensual (€)", 50, 1500, 250)
+anios = st.sidebar.slider("Años proyectados", 1, 30, 10)
 
-# [span_1](start_span)[span_2](start_span)[span_3](start_span)Rentabilidades según tu guía[span_1](end_span)[span_2](end_span)[span_3](end_span)
-st.sidebar.subheader("Rentabilidad Anual (%)")
-r_bunker = st.sidebar.slider("Búnker (Nasdaq)", 5, 20, 12)
-r_cohete = st.sidebar.slider("Cohete (Explosiva)", 10, 80, 25)
+st.sidebar.subheader("Rentabilidad Anual Proyectada")
+r_bunker = st.sidebar.slider("Zona Búnker (Nasdaq/Segura)", 5, 20, 12)
+r_cohete = st.sidebar.slider("Zona Cohete (Explosiva/Apuesta)", 10, 100, 25)
 
-# Lógica 50k: 52% Búnker | [span_4](start_span)[span_5](start_span)48% Cohete[span_4](end_span)[span_5](end_span)
+# Lógica: 130€ Búnker (52%) | 120€ Cohete (48%)
 r_ponderada = (r_bunker * 0.52 + r_cohete * 0.48) / 100
 r_mensual = (1 + r_ponderada)**(1/12) - 1
 total_meses = anios * 12
 
 # Simulación
+data = []
 saldo = cap_inicial
 invertido = cap_inicial
-data = []
 for m in range(1, total_meses + 1):
     saldo = (saldo + aporte_mensual) * (1 + r_mensual)
     invertido += aporte_mensual
@@ -94,35 +89,41 @@ for m in range(1, total_meses + 1):
 
 df = pd.DataFrame(data)
 
-# 5. VISUALIZACIÓN
-c1, c2 = st.columns(2)
-with c1:
-    st.markdown(f'<div class="metric-card"><p style="color: #8b949e;">PATRIMONIO</p><p class="value-text">{df["Total"].iloc[-1]:,.2f}€</p></div>', unsafe_allow_html=True)
-with c2:
+# 5. VISUALIZACIÓN DE RESULTADOS
+col1, col2 = st.columns(2)
+with col1:
+    st.markdown(f'<div class="metric-card"><p>PATRIMONIO FINAL</p><p class="highlight-val">{df["Total"].iloc[-1]:,.2f}€</p></div>', unsafe_allow_html=True)
+with col2:
     regalo = df['Total'].iloc[-1] - df['Tu Dinero'].iloc[-1]
-    st.markdown(f'<div class="metric-card"><p style="color: #8b949e;">DINERO "GRATIS"</p><p class="value-text" style="color:#00ffcc;">+{regalo:,.2f}€</p></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="metric-card"><p>DINERO "GRATIS" (INTERÉS)</p><p class="highlight-val">+{regalo:,.2f}€</p></div>', unsafe_allow_html=True)
 
-# Gráfico de Quesito
+# Gráfica de Quesito
 fig_pie = go.Figure(data=[go.Pie(
-    labels=['Tu Esfuerzo', 'Interés Compuesto'],
+    labels=['Inversión Real', 'Interés Generado'],
     values=[df['Tu Dinero'].iloc[-1], df['Gratis'].iloc[-1]],
     hole=.7,
     marker=dict(colors=['#00ccff', '#00ffcc'], line=dict(color='#0d1117', width=5))
 )])
-fig_pie.update_layout(showlegend=False, paper_bgcolor='rgba(0,0,0,0)', height=300, margin=dict(t=0, b=0, l=0, r=0))
+fig_pie.update_layout(showlegend=True, paper_bgcolor='rgba(0,0,0,0)', font=dict(color="#8b949e"), height=300)
 st.plotly_chart(fig_pie, use_container_width=True)
 
-# Barra de Progreso
-fig_bar = go.Figure()
-fig_bar.add_trace(go.Bar(x=df["Año"], y=df["Tu Dinero"], name="Inversión", marker_color='#00ccff'))
-fig_bar.add_trace(go.Bar(x=df["Año"], y=df["Gratis"], name="Intereses", marker_color='#00ffcc'))
-fig_bar.update_layout(barmode='stack', template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
-st.plotly_chart(fig_bar, use_container_width=True)
-
-# [span_6](start_span)[span_7](start_span)[span_8](start_span)Meta 50k[span_6](end_span)[span_7](end_span)[span_8](end_span)
+# Hito 50k
 meta = 50000
 s_meta, m_meta = cap_inicial, 0
 while s_meta < meta and m_meta < 600:
     s_meta = (s_meta + aporte_mensual) * (1 + r_mensual)
     m_meta += 1
-st.info(f"🎯 **Hito Ruta 50k:** Alcanzarás los 50.000€ en **{m_meta//12} años y {m_meta%12} meses**.")
+st.info(f"🎯 **Meta 50k:** Según estos ajustes, tardarías **{m_meta//12} años y {m_meta%12} meses**.")
+
+# 6. ADVERTENCIA LEGAL Y DISCLAIMER
+st.markdown(f"""
+<div class="disclaimer-box">
+    <strong>⚠️ AVISO IMPORTANTE Y DESCARGO DE RESPONSABILIDAD:</strong><br><br>
+    Los cálculos mostrados son <strong>estimaciones matemáticas basadas en datos históricos</strong> y no garantizan resultados futuros[cite: 1, 2]. 
+    La rentabilidad real dependerá de la volatilidad del mercado, la cual es impredecible.<br><br>
+    La <strong>"Zona Explosiva" (Cohete)</strong> mencionada en esta guía implica un alto riesgo y debe considerarse una apuesta especulativa donde es posible perder gran parte del capital[cite: 49, 53]. 
+    Nada de lo aquí expuesto constituye una recomendación personalizada de inversión[cite: 1].<br><br>
+    Es responsabilidad exclusiva del usuario informarse, formarse y actuar bajo su propio riesgo[cite: 2]. 
+    @InversorEnPrácticas no se hace responsable de posibles pérdidas financieras derivados del uso de esta herramienta.
+</div>
+""", unsafe_allow_html=True)
