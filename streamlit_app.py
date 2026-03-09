@@ -34,7 +34,7 @@ def check_password():
         st.markdown('<div class="auth-container">', unsafe_allow_html=True)
         st.title("🔐 Acceso Privado")
         pwd = st.text_input("Introduce la clave incluida en la guía", type="password")
-        if st.button("Desbloquear Ruta 50K"):
+        if st.button("Desbloquear App 🚀"):
             if pwd == CLAVE_ACCESO:
                 st.session_state.autenticado = True
                 st.rerun()
