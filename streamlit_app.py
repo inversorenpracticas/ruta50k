@@ -138,6 +138,8 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# URL de la pista Darktech/Cyberpunk
+AUDIO_URL = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"
 # Cabecera
 ARCHIVO_LOGO = "logo.png" 
 if os.path.exists(ARCHIVO_LOGO):
@@ -151,6 +153,26 @@ st.markdown("""
     OPERATIVA OFICIAL 
     <a href="https://beacons.ai/inversorenpracticas" target="_blank" class="neon-link">@INVERSORENPRACTICAS</a>
 </p>
+""", unsafe_allow_html=True)
+# Inyección de Audio Invisible en Bucle
+st.markdown(f"""
+    <audio autoplay loop id="bgAudio">
+        <source src="{AUDIO_URL}" type="audio/mp3">
+    </audio>
+    <style>
+        /* Ocultar el reproductor pero mantenerlo funcional */
+        #bgAudio {{
+            display: none;
+        }}
+    </style>
+    <script>
+        // Intento de forzar el play si el navegador bloquea el autoplay
+        var audio = document.getElementById("bgAudio");
+        audio.volume = 0.5; // Volumen al 50% para no asustar
+        document.addEventListener('click', function() {{
+            audio.play();
+        }}, {{ once: true }});
+    </script>
 """, unsafe_allow_html=True)
 
 # ==========================================
