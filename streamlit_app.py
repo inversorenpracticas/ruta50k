@@ -208,7 +208,7 @@ st.markdown(f"<p style='text-align:right; color:#00ffcc;'>Progreso hacia 50.000�
 # 6. RADIOGRAFÍA DE ACTIVOS (NUEVA FUNCIÓN)
 # ==========================================
 st.write("---")
-st.header("🧬 Desglose de Activos (Tu Estrategia)")
+st.header("🧬 Desglose de Activos (Estrategia @InversorEnPracticas)")
 col_pie_dist, col_txt_dist = st.columns([1, 1])
 
 # Cálculo de pesos basados en tu estrategia (130 bunker / 120 cohete de cada 250)
@@ -242,7 +242,7 @@ with col_txt_dist:
     st.write(f"**Distribución de tus {aporte_mensual}€ mensuales:**")
     for i in range(len(dist_activos["Activo"])):
         st.write(f"• **{dist_activos['Activo'][i]}** ({dist_activos['Categoría'][i]}): **{dist_activos['Mensual (€)'][i]:,.2f}€**")
-    st.info("💡 Este desglose respeta el equilibrio 52% Búnker / 48% Explosiva de tu guía oficial.")
+    st.info("💡 Este desglose respeta el equilibrio 52% Búnker / 48% Explosiva como explicamos en la guía.")
 
 # ==========================================
 # 7. GRÁFICAS ORIGINALES
