@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-import os
 
 # 1. CONFIGURACIÓN DE PÁGINA
 st.set_page_config(page_title="Ruta 50k - Inversor PRO", layout="wide")
@@ -11,7 +10,7 @@ st.set_page_config(page_title="Ruta 50k - Inversor PRO", layout="wide")
 LOGO_URL = "https://drive.google.com/uc?export=view&id=1l6Iw1f7-sDlMcEAkocHznItSbDIGIoWt"
 BEACONS_URL = "https://beacons.ai/inversorenpracticas?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAb21jcAQbflFleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAaeZ6qvarSAZN6VM_yEjdjCY_erebS7SWi2aLC8zY-bHvgQkB0WQzNz0Ze2PFw_aem_432qykbykJ3WIHU2HaOHWQ"
 
-# 2. CSS AVANZADO: FONDO ANIMADO Y TIPOGRAFÍA TECH
+# 2. CSS AVANZADO: FONDO ANIMADO, FUENTES TECH Y TARJETAS
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
@@ -30,39 +29,28 @@ st.markdown("""
         100% { background-position: 0% 50%; }
     }
 
-    /* Contenedor de Cabecera Centrada */
+    /* Contenedor de Cabecera */
     .header-container {
         text-align: center;
         padding-bottom: 20px;
     }
 
-    /* Logo con tamaño equilibrado */
-    .centered-logo {
-        width: 145px;
-        border-radius: 50%;
-        filter: drop-shadow(0 0 15px rgba(0, 255, 204, 0.6));
-        margin-bottom: 10px;
-    }
-
-    /* Título con Orbitron */
     .main-title {
         font-family: 'Orbitron', sans-serif !important;
         font-size: 2.8rem !important;
         font-weight: 900 !important;
         color: #00ffcc !important;
         text-shadow: 0 0 15px rgba(0, 255, 204, 0.6), 2px 2px 4px #000 !important;
-        margin: 0 !important;
+        margin: 10px 0 !important;
         letter-spacing: 2px !important;
         text-transform: uppercase;
     }
 
-    /* Subtítulo y Enlace Beacons */
     .sub-title {
         font-family: 'Orbitron', sans-serif;
         color: #8b949e;
         font-size: 14px;
         letter-spacing: 2px;
-        margin-top: 5px;
     }
 
     .beacons-link {
@@ -95,14 +83,16 @@ st.markdown("""
         color: #00ffcc;
     }
 
-    .disclaimer {
-        background: rgba(255, 0, 85, 0.1);
-        border-left: 5px solid #ff0055;
-        padding: 15px;
-        border-radius: 10px;
-        font-size: 12px;
+    /* Cláusula de Responsabilidad Detallada */
+    .disclaimer-box {
+        background: rgba(255, 0, 85, 0.05);
+        border: 1px solid #ff0055;
+        padding: 25px;
+        border-radius: 15px;
+        font-size: 14px;
         color: #ffb3c1;
-        margin-top: 30px;
+        margin-top: 40px;
+        line-height: 1.6;
     }
 
     [data-testid="stSidebar"] {
@@ -112,10 +102,13 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 3. CABECERA CENTRADA
+# 3. CABECERA CENTRADA (Arreglo del Logo)
+col_l, col_m, col_r = st.columns([1, 2, 1])
+with col_m:
+    st.image(LOGO_URL, width=150) # Tamaño equilibrado y centrado automáticamente por la columna
+
 st.markdown(f"""
     <div class="header-container">
-        <img src="{LOGO_URL}" class="centered-logo">
         <h1 class="main-title">SIMULADOR RUTA 50K</h1>
         <p class="sub-title">
             OPERATIVA OFICIAL <a href="{BEACONS_URL}" class="beacons-link" target="_blank">@INVERSORENPRÁCTICAS</a>
@@ -196,10 +189,12 @@ while s_meta < meta and m_meta < 600:
     m_meta += 1
 st.success(f"🎯 **PROYECCIÓN RUTA 50K:** Alcanzarás los 50.000€ en **{m_meta//12} años y {m_meta%12} meses**.")
 
-# 7. DISCLAIMER LEGAL
+# 7. ADVERTENCIA LEGAL EXTENDIDA
 st.markdown(f"""
-<div class="disclaimer">
-    <strong>⚡ CLÁUSULA DE RESPONSABILIDAD:</strong><br><br>
-    Estimaciones matemáticas basadas en datos históricos [cite: 34, 55-58]. Sin garantías futuras. Mercado volátil. La Zona Cohete es de alto riesgo [cite: 48-49]. Esto NO constituye consejo financiero [cite: 1-2].
+<div class="disclaimer-box">
+    <strong>⚠️ AVISO IMPORTANTE Y DESCARGO DE RESPONSABILIDAD:</strong><br><br>
+    Los cálculos mostrados en este simulador son <strong>estimaciones matemáticas basadas en rendimientos históricos</strong> y no garantizan resultados futuros [cite: 34, 55-58]. La rentabilidad real está sujeta a la volatilidad del mercado, la cual es intrínsecamente impredecible.<br><br>
+    La <strong>"Zona Cohete"</strong> (Explosive Zone) descrita en la guía representa activos de alto riesgo y debe considerarse como una apuesta especulativa donde es posible la pérdida total o parcial del capital invertido [cite: 48-49]. Nada de lo aquí expuesto constituye una recomendación personalizada de inversión o consejo financiero [cite: 1-2].<br><br>
+    Es responsabilidad exclusiva del lector investigar por su cuenta, formarse adecuadamente y actuar bajo su propia responsabilidad. <strong>@InversorEnPrácticas</strong> no se hace responsable de las decisiones financieras tomadas ni de las posibles pérdidas derivadas del uso de esta herramienta o de la guía adjunta.
 </div>
 """, unsafe_allow_html=True)
