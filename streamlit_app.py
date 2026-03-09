@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 import os
 
 # ==========================================
-# 1. BLOQUEO DE ACCESO (ACCESO PRIVADO)
+# 1. BLOQUEO DE ACCESO
 # ==========================================
 CLAVE_ACCESO = "RUTA50K2026"
 
@@ -20,15 +20,17 @@ def check_password():
             font-family: 'Orbitron', sans-serif;
             text-align: center;
             padding: 50px;
-            background: rgba(13, 17, 23, 0.9);
+            background: #0d1117;
             border: 2px solid #00ffcc;
             border-radius: 20px;
             box-shadow: 0 0 20px #00ffcc;
+            margin-top: 50px;
         }
         </style>
     """, unsafe_allow_html=True)
     
-    with st.container():
+    col_a, col_b, col_c = st.columns([1,2,1])
+    with col_b:
         st.markdown('<div class="auth-container">', unsafe_allow_html=True)
         st.title("🔐 Acceso Privado")
         pwd = st.text_input("Introduce la clave incluida en la guía", type="password")
@@ -37,7 +39,7 @@ def check_password():
                 st.session_state.autenticado = True
                 st.rerun()
             else:
-                st.error("Clave incorrecta. Revisa la guía.")
+                st.error("Clave incorrecta.")
         st.markdown('</div>', unsafe_allow_html=True)
 
 if not st.session_state.autenticado:
@@ -53,12 +55,10 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
 
-    /* Fuente Global Orbitron (excepto Sidebar) */
     html, body, [class*="st-"] {
         font-family: 'Orbitron', sans-serif;
     }
 
-    /* Resetear Sidebar a Sans-Serif para legibilidad */
     [data-testid="stSidebar"] * {
         font-family: 'sans-serif' !important;
     }
@@ -67,7 +67,6 @@ st.markdown("""
         background: linear-gradient(-45deg, #0d1117, #161b22, #0d1117, #1a1f26);
         background-size: 400% 400%;
         animation: gradient 15s ease infinite;
-        color: #e6edf3;
     }
 
     @keyframes gradient {
@@ -81,233 +80,165 @@ st.markdown("""
         font-weight: 900;
         color: #00ffcc;
         text-align: center;
-        text-shadow: 0 0 20px rgba(0, 255, 204, 0.8), 2px 2px 5px #000;
+        text-shadow: 0 0 20px rgba(0, 255, 204, 0.8);
         margin-top: -10px;
-        letter-spacing: 3px;
     }
 
-    /* Enlace Clicable con efecto Neón */
     .neon-link {
         color: #00ccff;
         text-decoration: none;
         font-weight: bold;
-        transition: all 0.3s ease;
+        transition: 0.3s;
     }
     .neon-link:hover {
         color: #00ffcc;
-        text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc, 0 0 20px #00ffcc;
-    }
-
-    .centered-logo {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 180px;
-        border-radius: 50%;
-        filter: drop-shadow(0 0 25px rgba(0, 255, 204, 0.7));
-        margin-bottom: 20px;
+        text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
     }
 
     .metric-card {
         background: rgba(22, 27, 34, 0.6);
         backdrop-filter: blur(15px);
         border-radius: 25px;
-        padding: 35px;
+        padding: 30px;
         text-align: center;
         border: 1px solid rgba(0, 255, 204, 0.3);
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
-        margin-bottom: 30px;
+        margin-bottom: 20px;
     }
 
     .value-text {
-        font-size: 42px;
+        font-size: 38px;
         font-weight: bold;
         color: #00ffcc;
-        text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
     }
 
     .disclaimer {
-        background: rgba(255, 0, 85, 0.1);
+        background: rgba(255, 0, 85, 0.05);
         border-left: 5px solid #ff0055;
-        padding: 20px;
-        border-radius: 10px;
-        font-size: 13px;
+        padding: 15px;
+        font-size: 12px;
         color: #ffb3c1;
-        margin-top: 40px;
+        margin-top: 30px;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Cabecera
-ARCHIVO_LOGO = "logo.png" 
-if os.path.exists(ARCHIVO_LOGO):
-    st.markdown(f'<div style="text-align:center;"><img src="data:image/png;base64,{st.image(ARCHIVO_LOGO)}" class="centered-logo"></div>', unsafe_allow_html=True)
-else:
-    st.markdown(f'<div style="text-align:center;"><img src="https://drive.google.com/uc?export=view&id=1l6Iw1f7-sDlMcEAkocHznItSbDIGIoWt" class="centered-logo"></div>', unsafe_allow_html=True)
-
+# Logo y Título
+st.markdown('<div style="text-align:center;"><img src="https://drive.google.com/uc?export=view&id=1l6Iw1f7-sDlMcEAkocHznItSbDIGIoWt" style="width:150px; border-radius:50%; filter: drop-shadow(0 0 15px #00ffcc);"></div>', unsafe_allow_html=True)
 st.markdown('<h1 class="main-title">SIMULADOR RUTA 50K</h1>', unsafe_allow_html=True)
-st.markdown("""
-<p style='text-align: center; letter-spacing: 2px;'>
-    OPERATIVA OFICIAL 
-    <a href="https://beacons.ai/inversorenpracticas" target="_blank" class="neon-link">@INVERSORENPRACTICAS</a>
-</p>
-""", unsafe_allow_html=True)
+st.markdown("""<p style='text-align: center;'>OPERATIVA OFICIAL <a href="https://beacons.ai/inversorenpracticas" target="_blank" class="neon-link">@INVERSORENPRACTICAS</a></p>""", unsafe_allow_html=True)
 
 # ==========================================
-# 3. PANEL DE CONTROL (SIDEBAR)
+# 3. SIDEBAR
 # ==========================================
 st.sidebar.header("🕹️ CONTROL DE MISIÓN")
 cap_inicial = st.sidebar.number_input("Capital Inicial (€)", value=0, step=100)
 aporte_mensual = st.sidebar.slider("Inversión Mensual Total (€)", 50, 1500, 250)
 anios = st.sidebar.slider("Tiempo (Años)", 1, 35, 10)
 
-st.sidebar.subheader("Rendimiento Esperado (%)")
-r_bunker = st.sidebar.slider("Zona Búnker", 5, 20, 12)
-r_cohete = st.sidebar.slider("Zona Cohete", 10, 100, 25)
+st.sidebar.subheader("Rentabilidad Esperada")
+r_bunker = st.sidebar.slider("Zona Búnker %", 5, 20, 12)
+r_cohete = st.sidebar.slider("Zona Cohete %", 10, 100, 25)
 
-# Lógica de Rentabilidad Ponderada (ORIGINAL)
+# Lógica Original
 r_ponderada = (r_bunker * 0.52 + r_cohete * 0.48) / 100
 r_mensual = (1 + r_ponderada)**(1/12) - 1
-total_meses = anios * 12
 
 # ==========================================
-# 4. SIMULACIÓN (CÁLCULOS ORIGINALES)
+# 4. CÁLCULOS Y BARRA DE PROGRESO
 # ==========================================
 data = []
 saldo = cap_inicial
-invertido = cap_inicial
-for m in range(1, total_meses + 1):
+for m in range(1, (anios * 12) + 1):
     saldo = (saldo + aporte_mensual) * (1 + r_mensual)
-    invertido += aporte_mensual
     if m % 12 == 0:
-        data.append({"Año": m//12, "Total": saldo, "Tu Dinero": invertido, "Gratis": saldo - invertido})
+        inv_real = cap_inicial + (aporte_mensual * m)
+        data.append({"Año": m//12, "Total": saldo, "Tu Dinero": inv_real, "Gratis": saldo - inv_real})
 
 df = pd.DataFrame(data)
 
-# ==========================================
-# 5. RESULTADOS Y BARRA DE PROGRESO
-# ==========================================
-col1, col2 = st.columns(2)
-with col1:
-    st.markdown(f'<div class="metric-card"><p style="color:#8b949e; letter-spacing:2px;">PATRIMONIO FINAL</p><p class="value-text">{df["Total"].iloc[-1]:,.2f}€</p><p style="color:#00ccff;">Aporte Real: {df["Tu Dinero"].iloc[-1]:,.0f}€</p></div>', unsafe_allow_html=True)
-with col2:
-    regalo = df['Total'].iloc[-1] - df['Tu Dinero'].iloc[-1]
-    st.markdown(f'<div class="metric-card"><p style="color:#8b949e; letter-spacing:2px;">DINERO "GRATIS"</p><p class="value-text" style="color:#00ffcc;">+{regalo:,.2f}€</p><p style="color:#00ccff;">Interés Compuesto</p></div>', unsafe_allow_html=True)
+# Resultados Top
+c1, c2 = st.columns(2)
+with c1:
+    st.markdown(f'<div class="metric-card"><p style="color:#8b949e;">PATRIMONIO FINAL</p><p class="value-text">{df["Total"].iloc[-1]:,.2f}€</p></div>', unsafe_allow_html=True)
+with c2:
+    st.markdown(f'<div class="metric-card"><p style="color:#8b949e;">DINERO "GRATIS"</p><p class="value-text" style="color:#00ffcc;">+{df["Gratis"].iloc[-1]:,.2f}€</p></div>', unsafe_allow_html=True)
 
-# BARRA DE PROGRESO HACIA 50.000€
+# Barra Progreso
 st.write("### 📈 Progreso hacia la Meta")
-meta_50k = 50000
-capital_final = df["Total"].iloc[-1]
-porcentaje = min(capital_final / meta_50k, 1.0)
-st.progress(porcentaje)
-st.markdown(f"<p style='text-align:right; color:#00ffcc;'>Progreso hacia 50.000€ → {porcentaje*100:.1f}%</p>", unsafe_allow_html=True)
+prog_val = min(df["Total"].iloc[-1] / 50000, 1.0)
+st.progress(prog_val)
+st.caption(f"Meta 50.000€: {prog_val*100:.1f}% alcanzado")
 
-# Gráficas Originales
-col_pie, col_bar = st.columns([1, 2])
-with col_pie:
-    fig_pie = go.Figure(data=[go.Pie(
-        labels=['Tu Ahorro', 'Interés'],
-        values=[df['Tu Dinero'].iloc[-1], df['Gratis'].iloc[-1]],
-        hole=.75,
-        marker=dict(colors=['#00ccff', '#00ffcc'], line=dict(color='#0d1117', width=5))
-    )])
-    fig_pie.update_layout(showlegend=False, paper_bgcolor='rgba(0,0,0,0)', height=350, margin=dict(t=0, b=0, l=0, r=0))
-    st.plotly_chart(fig_pie, use_container_width=True)
-
-with col_bar:
-    fig_bar = go.Figure()
-    fig_bar.add_trace(go.Bar(x=df["Año"], y=df["Tu Dinero"], name="Inversión Real", marker_color='#00ccff'))
-    fig_bar.add_trace(go.Bar(x=df["Año"], y=df["Gratis"], name="Interés Acumulado", marker_color='#00ffcc'))
-    fig_bar.update_layout(barmode='stack', template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', xaxis_title="Años de Evolución", yaxis_title="Capital Total (€)")
-    st.plotly_chart(fig_bar, use_container_width=True)
-
-# Meta 50k (Texto original)
-s_meta, m_meta = cap_inicial, 0
-while s_meta < meta_50k and m_meta < 600:
-    s_meta = (s_meta + aporte_mensual) * (1 + r_mensual)
-    m_meta += 1
-st.success(f"🎯 **PROYECCIÓN RUTA 50K:** Alcanzarás el hito de los 50.000€ en **{m_meta//12} años y {m_meta%12} meses** aportando {aporte_mensual}€/mes.")
-
+# ==========================================
+# 5. NUEVO: RADIOGRAFÍA DE LA CARTERA
+# ==========================================
 st.write("---")
+st.header("🧬 Radiografía de tu Inversión Mensual")
+col_pie_dist, col_txt_dist = st.columns([1, 1])
+
+# Distribución basada en tu estrategia real
+dist_data = {
+    "Activo": ["Nasdaq 100 (Búnker)", "Efectivo/Búnker", "MSTR (Cohete)", "ASTS (Cohete)", "PLTR (Cohete)"],
+    "Euros": [
+        aporte_mensual * 0.40,  # 100€ de 250€ aprox
+        aporte_mensual * 0.12,  # 30€ de 250€ aprox
+        aporte_mensual * 0.24,  # 60€ de 250€ aprox
+        aporte_mensual * 0.12,  # 30€ de 250€ aprox
+        aporte_mensual * 0.12   # 30€ de 250€ aprox
+    ],
+    "Color": ["#0044ff", "#0088ff", "#00ffcc", "#00ccaa", "#009988"]
+}
+
+with col_pie_dist:
+    fig_dist = go.Figure(data=[go.Pie(labels=dist_data["Activo"], values=dist_data["Euros"], 
+                                     marker=dict(colors=dist_data["Color"]), hole=0.5)])
+    fig_dist.update_layout(showlegend=False, paper_bgcolor='rgba(0,0,0,0)', height=300, margin=dict(t=0,b=0,l=0,r=0))
+    st.plotly_chart(fig_dist, use_container_width=True)
+
+with col_txt_dist:
+    for i in range(len(dist_data["Activo"])):
+        st.write(f"**{dist_data['Activo'][i]}:** {dist_data['Euros'][i]:,.2f}€ / mes")
 
 # ==========================================
-# 6. CALCULADORA INVERSA
+# 6. GRÁFICAS Y META
 # ==========================================
-st.header("🧮 Calculadora para alcanzar una meta")
-col_inv1, col_inv2 = st.columns(2)
-with col_inv1:
-    obj_meta = st.number_input("Objetivo Final (€)", value=100000, step=5000)
-with col_inv2:
-    obj_anios = st.number_input("Años disponibles", value=15, step=1)
-
-# Cálculo: PMT = (FV * r) / ((1 + r)^n - 1)
-n_meses = obj_anios * 12
-if r_mensual > 0:
-    cuota_necesaria = (obj_meta * r_mensual) / ((1 + r_mensual)**n_meses - 1)
-    st.success(f"Para alcanzar **{obj_meta:,.2f}€** en {obj_anios} años, necesitas invertir **{cuota_necesaria:,.2f}€ al mes** (con la rentabilidad actual).")
-else:
-    st.warning("La rentabilidad debe ser superior al 0% para calcular la cuota.")
-
 st.write("---")
+fig_bar = go.Figure()
+fig_bar.add_trace(go.Bar(x=df["Año"], y=df["Tu Dinero"], name="Tu Inversión", marker_color='#00ccff'))
+fig_bar.add_trace(go.Bar(x=df["Año"], y=df["Gratis"], name="Interés Compuesto", marker_color='#00ffcc'))
+fig_bar.update_layout(barmode='stack', template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+st.plotly_chart(fig_bar, use_container_width=True)
 
 # ==========================================
-# 7. COMPARADOR DE ESTRATEGIAS
+# 7. CALCULADORA INVERSA Y COMPARADOR
 # ==========================================
-st.header("⚔️ Comparador de Estrategias")
-aporte_est2 = st.number_input("Aporte Mensual Estrategia 2 (€)", value=aporte_mensual + 100, step=50)
+col_inv, col_comp = st.columns(2)
 
-# Simulación Estrategia 2
-saldo2 = cap_inicial
-data2 = []
-for m in range(1, total_meses + 1):
-    saldo2 = (saldo2 + aporte_est2) * (1 + r_mensual)
-    if m % 12 == 0:
-        data2.append(saldo2)
+with col_inv:
+    st.subheader("🧮 Calculadora Inversa")
+    m_obj = st.number_input("Meta Objetivo (€)", value=100000)
+    a_obj = st.number_input("Años", value=15)
+    n = a_obj * 12
+    if r_mensual > 0:
+        pmt = (m_obj * r_mensual) / ((1 + r_mensual)**n - 1)
+        st.info(f"Necesitas: **{pmt:,.2f}€/mes**")
 
-fig_comp = go.Figure()
-fig_comp.add_trace(go.Scatter(x=df["Año"], y=df["Total"], name=f"Estrat. 1 ({aporte_mensual}€)", line=dict(color='#00ccff', width=3)))
-fig_comp.add_trace(go.Scatter(x=df["Año"], y=data2, name=f"Estrat. 2 ({aporte_est2}€)", line=dict(color='#ff0055', width=3, dash='dot')))
-fig_comp.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', title="Estrat. 1 vs Estrat. 2")
-st.plotly_chart(fig_comp, use_container_width=True)
+with col_comp:
+    st.subheader("⚔️ Comparador")
+    aporte_2 = st.number_input("Aporte Estrategia 2 (€)", value=aporte_mensual+100)
+    s2 = cap_inicial
+    for _ in range(anios * 12): s2 = (s2 + aporte_2) * (1 + r_mensual)
+    st.warning(f"Estrat. 2: **{s2:,.2f}€**")
 
+# ==========================================
+# 8. GUARDAR Y LEGAL
+# ==========================================
 st.write("---")
+if 'planes' not in st.session_state: st.session_state.planes = []
+nombre_p = st.text_input("Nombre del plan")
+if st.button("Guardar Simulación"):
+    st.session_state.planes.append({"Nombre": nombre_p, "Total": f"{df['Total'].iloc[-1]:,.0f}€", "Mes": aporte_mensual})
+if st.session_state.planes: st.table(st.session_state.planes)
 
-# ==========================================
-# 8. GUARDAR SIMULACIONES
-# ==========================================
-st.header("💾 Guardar simulaciones")
-if 'planes' not in st.session_state:
-    st.session_state.planes = []
-
-col_save1, col_save2 = st.columns([3, 1])
-with col_save1:
-    nombre_plan = st.text_input("Nombre de tu plan (ej: Plan Jubilación)", placeholder="Mi plan Pro...")
-with col_save2:
-    if st.button("Guardar simulación"):
-        nuevo_plan = {
-            "Nombre": nombre_plan if nombre_plan else "Sin nombre",
-            "Cap. Inicial": cap_inicial,
-            "Aporte": aporte_mensual,
-            "Años": anios,
-            "Total": f"{df['Total'].iloc[-1]:,.2f}€"
-        }
-        st.session_state.planes.append(nuevo_plan)
-        st.toast("Simulación guardada con éxito!")
-
-if st.session_state.planes:
-    st.table(pd.DataFrame(st.session_state.planes))
-    if st.button("Limpiar historial"):
-        st.session_state.planes = []
-        st.rerun()
-
-# ==========================================
-# 9. ADVERTENCIA LEGAL (ORIGINAL)
-# ==========================================
-st.markdown(f"""
-<div class="disclaimer">
-    <strong>⚡ CLÁUSULA DE RESPONSABILIDAD:</strong><br><br>
-    Esta herramienta es un simulador matemático basado en proyecciones y rentabilidades históricas. No garantiza resultados futuros. 
-    El mercado es volátil y los precios pueden bajar drásticamente. La <strong>"Zona Cohete"</strong> es de alto riesgo.<br><br>
-    Esto <strong>NO ES CONSEJO FINANCIERO</strong>. El usuario es el único responsable de sus decisiones y debe investigar por su cuenta antes de invertir dinero real.
-</div>
-""", unsafe_allow_html=True)
+st.markdown('<div class="disclaimer"><strong>⚡ NO ES CONSEJO FINANCIERO.</strong> Simulador basado en proyecciones. El usuario es responsable de sus decisiones.</div>', unsafe_allow_html=True)
