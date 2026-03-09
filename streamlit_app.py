@@ -24,11 +24,13 @@ def check_password():
             border: 2px solid #00ffcc;
             border-radius: 20px;
             box-shadow: 0 0 20px #00ffcc;
+            margin-top: 50px;
         }
         </style>
     """, unsafe_allow_html=True)
     
-    with st.container():
+    col_a, col_b, col_c = st.columns([1,2,1])
+    with col_b:
         st.markdown('<div class="auth-container">', unsafe_allow_html=True)
         st.title("🔐 Acceso Privado")
         pwd = st.text_input("Introduce la clave incluida en la guía", type="password")
@@ -95,7 +97,7 @@ st.markdown("""
     }
     .neon-link:hover {
         color: #00ffcc;
-        text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+        text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc, 0 0 20px #00ffcc, 0 0 40px #00ffcc;
     }
 
     .centered-logo {
@@ -115,7 +117,7 @@ st.markdown("""
         padding: 35px;
         text-align: center;
         border: 1px solid rgba(0, 255, 204, 0.3);
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8), inset 2px 2px 5px rgba(255,255,255,0.05);
         margin-bottom: 30px;
     }
 
@@ -202,7 +204,50 @@ porcentaje = min(capital_final / meta_50k, 1.0)
 st.progress(porcentaje)
 st.markdown(f"<p style='text-align:right; color:#00ffcc;'>Progreso hacia 50.000€ → {porcentaje*100:.1f}%</p>", unsafe_allow_html=True)
 
-# Gráficas Originales
+# ==========================================
+# 6. RADIOGRAFÍA DE ACTIVOS (NUEVA FUNCIÓN)
+# ==========================================
+st.write("---")
+st.header("🧬 Desglose de Activos (Tu Estrategia)")
+col_pie_dist, col_txt_dist = st.columns([1, 1])
+
+# Cálculo de pesos basados en tu estrategia (130 bunker / 120 cohete de cada 250)
+# Bunker: Nasdaq (100/250=40%), Bunker/Efectivo (30/250=12%)
+# Cohete: MSTR (60/250=24%), ASTS (30/250=12%), PLTR (30/250=12%)
+dist_activos = {
+    "Activo": ["Nasdaq 100", "Búnker/Efectivo", "Microstrategy (MSTR)", "AST SpaceMobile (ASTS)", "Palantir (PLTR)"],
+    "Mensual (€)": [
+        aporte_mensual * 0.40,
+        aporte_mensual * 0.12,
+        aporte_mensual * 0.24,
+        aporte_mensual * 0.12,
+        aporte_mensual * 0.12
+    ],
+    "Categoría": ["Búnker", "Búnker", "Explosiva", "Explosiva", "Explosiva"],
+    "Color": ["#0044ff", "#0088ff", "#00ffcc", "#00ccaa", "#009988"]
+}
+
+with col_pie_dist:
+    fig_dist = go.Figure(data=[go.Pie(
+        labels=dist_activos["Activo"], 
+        values=dist_activos["Mensual (€)"],
+        marker=dict(colors=dist_activos["Color"]),
+        hole=0.5,
+        textinfo='label+percent'
+    )])
+    fig_dist.update_layout(showlegend=False, paper_bgcolor='rgba(0,0,0,0)', height=350, margin=dict(t=0,b=0,l=0,r=0))
+    st.plotly_chart(fig_dist, use_container_width=True)
+
+with col_txt_dist:
+    st.write(f"**Distribución de tus {aporte_mensual}€ mensuales:**")
+    for i in range(len(dist_activos["Activo"])):
+        st.write(f"• **{dist_activos['Activo'][i]}** ({dist_activos['Categoría'][i]}): **{dist_activos['Mensual (€)'][i]:,.2f}€**")
+    st.info("💡 Este desglose respeta el equilibrio 52% Búnker / 48% Explosiva de tu guía oficial.")
+
+# ==========================================
+# 7. GRÁFICAS ORIGINALES
+# ==========================================
+st.write("---")
 col_pie, col_bar = st.columns([1, 2])
 with col_pie:
     fig_pie = go.Figure(data=[go.Pie(
@@ -231,7 +276,7 @@ st.success(f"🎯 **PROYECCIÓN RUTA 50K:** Alcanzarás el hito de los 50.000€
 st.write("---")
 
 # ==========================================
-# 6. CALCULADORA INVERSA
+# 8. CALCULADORA INVERSA
 # ==========================================
 st.header("🧮 Calculadora para alcanzar una meta")
 col_inv1, col_inv2 = st.columns(2)
@@ -240,7 +285,6 @@ with col_inv1:
 with col_inv2:
     obj_anios = st.number_input("Años disponibles", value=15, step=1)
 
-# Cálculo: PMT = (FV * r) / ((1 + r)^n - 1)
 n_meses = obj_anios * 12
 if r_mensual > 0:
     cuota_necesaria = (obj_meta * r_mensual) / ((1 + r_mensual)**n_meses - 1)
@@ -251,7 +295,7 @@ else:
 st.write("---")
 
 # ==========================================
-# 7. COMPARADOR DE ESTRATEGIAS
+# 9. COMPARADOR DE ESTRATEGIAS
 # ==========================================
 st.header("⚔️ Comparador de Estrategias")
 aporte_est2 = st.number_input("Aporte Mensual Estrategia 2 (€)", value=aporte_mensual + 100, step=50)
@@ -273,7 +317,7 @@ st.plotly_chart(fig_comp, use_container_width=True)
 st.write("---")
 
 # ==========================================
-# 8. GUARDAR SIMULACIONES
+# 10. GUARDAR SIMULACIONES
 # ==========================================
 st.header("💾 Guardar simulaciones")
 if 'planes' not in st.session_state:
@@ -301,7 +345,7 @@ if st.session_state.planes:
         st.rerun()
 
 # ==========================================
-# 9. ADVERTENCIA LEGAL (ORIGINAL)
+# 11. ADVERTENCIA LEGAL (ORIGINAL)
 # ==========================================
 st.markdown(f"""
 <div class="disclaimer">
