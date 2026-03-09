@@ -16,6 +16,7 @@ def check_password():
     st.markdown("""
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
         .auth-container {
             font-family: 'Orbitron', sans-serif;
             text-align: center;
@@ -26,12 +27,40 @@ def check_password():
             box-shadow: 0 0 20px #00ffcc;
             margin-top: 50px;
         }
+
+        /* ESTILO DEL CUADRO NEÓN SUPERIOR */
+        .neon-box {
+            border: 2px solid #00ffcc;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 15px #00ffcc;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .neon-text-box {
+            color: #00ffcc;
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            margin: 0;
+            text-shadow: 0 0 10px #00ffcc;
+        }
         </style>
     """, unsafe_allow_html=True)
     
     col_a, col_b, col_c = st.columns([1,2,1])
     with col_b:
         st.markdown('<div class="auth-container">', unsafe_allow_html=True)
+        
+        # AQUÍ SE AÑADE EL CUADRO CON EL TEXTO
+        st.markdown("""
+            <div class="neon-box">
+                <p class="neon-text-box">INVERSOR PRO</p>
+            </div>
+        """, unsafe_allow_html=True)
+
         st.title("🔐 Acceso Privado")
         pwd = st.text_input("Introduce la clave incluida en la guía", type="password")
         if st.button("Desbloquear App 🚀"):
@@ -41,10 +70,6 @@ def check_password():
             else:
                 st.error("Clave incorrecta. Revisa la guía.")
         st.markdown('</div>', unsafe_allow_html=True)
-
-if not st.session_state.autenticado:
-    check_password()
-    st.stop()
 
 # ==========================================
 # 2. CONFIGURACIÓN Y ESTILO CSS
