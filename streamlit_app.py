@@ -10,6 +10,10 @@ st.set_page_config(page_title="Ruta 50k - Inversor PRO", layout="wide")
 # Nombre de tu archivo de logo en GitHub
 ARCHIVO_LOGO = "logo.png" 
 
+# Datos de marca
+LOGO_URL = "https://drive.google.com/uc?export=view&id=1l6Iw1f7-sDlMcEAkocHznItSbDIGIoWt"
+BEACONS_URL = "https://beacons.ai/inversorenpracticas?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAb21jcAQbflFleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAaeZ6qvarSAZN6VM_yEjdjCY_erebS7SWi2aLC8zY-bHvgQkB0WQzNz0Ze2PFw_aem_432qykbykJ3WIHU2HaOHWQ"
+
 # 2. CSS AVANZADO: FONDO ANIMADO, FUENTES TECH Y RELIEVES
 st.markdown("""
 <style>
