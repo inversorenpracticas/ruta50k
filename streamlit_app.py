@@ -52,6 +52,11 @@ st.markdown("""
         color: #00ccff !important;
         text-decoration: none;
         font-weight: bold;
+        transition: 0.3s;
+    }
+    .beacons-link:hover {
+        color: #00ffcc !important;
+        text-shadow: 0 0 10px #00ffcc;
     }
 
     .metric-card {
@@ -81,6 +86,7 @@ st.markdown("""
         color: #ffb3c1;
         margin-top: 40px;
         line-height: 1.6;
+        text-align: left;
     }
 
     [data-testid="stSidebar"] {
@@ -90,7 +96,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 3. CABECERA CENTRADA (Arreglo del Logo sin el "0")
+# 3. CABECERA CENTRADA
 col_1, col_2, col_3 = st.columns([1, 1, 1])
 with col_2:
     st.image(LOGO_URL, use_container_width=True)
@@ -114,7 +120,7 @@ st.sidebar.subheader("Rendimiento Esperado (%)")
 r_bunker = st.sidebar.slider("Zona Búnker", 5, 20, 12)
 r_cohete = st.sidebar.slider("Zona Cohete", 10, 100, 25)
 
-# Lógica: 130€ (52%) Búnker | 120€ (48%) Cohete
+# Lógica: 130€ (52%) Búnker | 120€ (48%) Cohete [cite: 4, 26, 48]
 r_ponderada = (r_bunker * 0.52 + r_cohete * 0.48) / 100
 r_mensual = (1 + r_ponderada)**(1/12) - 1
 total_meses = anios * 12
@@ -161,8 +167,8 @@ with col_bar:
         template="plotly_dark", 
         paper_bgcolor='rgba(0,0,0,0)', 
         plot_bgcolor='rgba(0,0,0,0)',
-        xaxis_title="Años",
-        yaxis_title="Capital (€)",
+        xaxis_title="Años de Evolución",
+        yaxis_title="Capital Total (€)",
         font=dict(family="Orbitron", size=11)
     )
     st.plotly_chart(fig_bar, use_container_width=True)
@@ -172,14 +178,14 @@ s_meta, m_meta = cap_inicial, 0
 while s_meta < meta and m_meta < 600:
     s_meta = (s_meta + total_mensual) * (1 + r_mensual)
     m_meta += 1
-st.success(f"🎯 **PROYECCIÓN RUTA 50K:** Alcanzarás los 50.000€ en **{m_meta//12} años y {m_meta%12} meses**.")
+st.success(f"🎯 **PROYECCIÓN RUTA 50K:** Alcanzarás los 50.000€ en **{m_meta//12} años y {m_meta%12} meses** aportando {aporte_mensual}€/mes[cite: 3].")
 
-# 7. ADVERTENCIA LEGAL EXTENDIDA (Restaurada)
+# 7. ADVERTENCIA LEGAL EXTENDIDA
 st.markdown(f"""
 <div class="disclaimer-box">
     <strong>⚠️ AVISO IMPORTANTE Y DESCARGO DE RESPONSABILIDAD:</strong><br><br>
-    Los cálculos mostrados en este simulador son <strong>estimaciones matemáticas basadas en rendimientos históricos</strong> y no garantizan resultados futuros . La rentabilidad real está sujeta a la volatilidad del mercado, la cual es intrínsecamente impredecible.<br><br>
+    Los cálculos mostrados en este simulador son <strong>estimaciones matemáticas basadas en rendimientos históricos</strong> y no garantizan resultados futuros [cite: 34, 55-58]. La rentabilidad real está sujeta a la volatilidad del mercado, la cual es intrínsecamente impredecible.<br><br>
     La <strong>"Zona Cohete"</strong> (Explosive Zone) descrita en la guía representa activos de alto riesgo y debe considerarse como una apuesta especulativa donde es posible la pérdida total o parcial del capital invertido [cite: 48-49]. Nada de lo aquí expuesto constituye una recomendación personalizada de inversión o consejo financiero [cite: 1-2].<br><br>
-    Es responsabilidad exclusiva del lector investigar por su cuenta, formarse adecuadamente y actuar bajo su propia responsabilidad. <strong>@InversorEnPrácticas</strong> no se hace responsable de las decisiones financieras tomadas ni de las posibles pérdidas derivadas del uso de esta herramienta o de la guía adjunta.
+    Es responsabilidad exclusiva del lector investigar por su cuenta, formarse adecuadamente y actuar bajo su propia responsabilidad. <strong>@InversorEnPrácticas</strong> no se hace responsable de las decisiones financieras tomadas ni de las posibles pérdidas derivadas del uso de esta herramienta o de la guía adjunta[cite: 2].
 </div>
 """, unsafe_allow_html=True)
