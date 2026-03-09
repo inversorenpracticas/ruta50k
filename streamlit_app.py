@@ -15,7 +15,6 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
 
-    /* Fondo animado */
     .main {
         background: linear-gradient(-45deg, #0d1117, #161b22, #0d1117, #1a1f26);
         background-size: 400% 400%;
@@ -29,12 +28,6 @@ st.markdown("""
         100% { background-position: 0% 50%; }
     }
 
-    /* Contenedor de Cabecera */
-    .header-container {
-        text-align: center;
-        padding-bottom: 20px;
-    }
-
     .main-title {
         font-family: 'Orbitron', sans-serif !important;
         font-size: 2.8rem !important;
@@ -43,6 +36,7 @@ st.markdown("""
         text-shadow: 0 0 15px rgba(0, 255, 204, 0.6), 2px 2px 4px #000 !important;
         margin: 10px 0 !important;
         letter-spacing: 2px !important;
+        text-align: center;
         text-transform: uppercase;
     }
 
@@ -51,20 +45,15 @@ st.markdown("""
         color: #8b949e;
         font-size: 14px;
         letter-spacing: 2px;
+        text-align: center;
     }
 
     .beacons-link {
         color: #00ccff !important;
         text-decoration: none;
         font-weight: bold;
-        transition: 0.3s;
-    }
-    .beacons-link:hover {
-        color: #00ffcc !important;
-        text-shadow: 0 0 10px #00ffcc;
     }
 
-    /* Tarjetas estilo Cristal */
     .metric-card {
         background: rgba(22, 27, 34, 0.6);
         backdrop-filter: blur(15px);
@@ -83,7 +72,6 @@ st.markdown("""
         color: #00ffcc;
     }
 
-    /* Cláusula de Responsabilidad Detallada */
     .disclaimer-box {
         background: rgba(255, 0, 85, 0.05);
         border: 1px solid #ff0055;
@@ -102,18 +90,16 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 3. CABECERA CENTRADA (Arreglo del Logo)
-col_l, col_m, col_r = st.columns([1, 2, 1])
-with col_m:
-    st.image(LOGO_URL, width=150) # Tamaño equilibrado y centrado automáticamente por la columna
+# 3. CABECERA CENTRADA (Arreglo del Logo sin el "0")
+col_1, col_2, col_3 = st.columns([1, 1, 1])
+with col_2:
+    st.image(LOGO_URL, use_container_width=True)
 
 st.markdown(f"""
-    <div class="header-container">
-        <h1 class="main-title">SIMULADOR RUTA 50K</h1>
-        <p class="sub-title">
-            OPERATIVA OFICIAL <a href="{BEACONS_URL}" class="beacons-link" target="_blank">@INVERSORENPRÁCTICAS</a>
-        </p>
-    </div>
+    <h1 class="main-title">SIMULADOR RUTA 50K</h1>
+    <p class="sub-title">
+        OPERATIVA OFICIAL <a href="{BEACONS_URL}" class="beacons-link" target="_blank">@INVERSORENPRÁCTICAS</a>
+    </p>
     """, unsafe_allow_html=True)
 
 st.write("---")
@@ -181,19 +167,18 @@ with col_bar:
     )
     st.plotly_chart(fig_bar, use_container_width=True)
 
-# Hito
 meta = 50000
 s_meta, m_meta = cap_inicial, 0
 while s_meta < meta and m_meta < 600:
-    s_meta = (s_meta + aporte_mensual) * (1 + r_mensual)
+    s_meta = (s_meta + total_mensual) * (1 + r_mensual)
     m_meta += 1
 st.success(f"🎯 **PROYECCIÓN RUTA 50K:** Alcanzarás los 50.000€ en **{m_meta//12} años y {m_meta%12} meses**.")
 
-# 7. ADVERTENCIA LEGAL EXTENDIDA
+# 7. ADVERTENCIA LEGAL EXTENDIDA (Restaurada)
 st.markdown(f"""
 <div class="disclaimer-box">
     <strong>⚠️ AVISO IMPORTANTE Y DESCARGO DE RESPONSABILIDAD:</strong><br><br>
-    Los cálculos mostrados en este simulador son <strong>estimaciones matemáticas basadas en rendimientos históricos</strong> y no garantizan resultados futuros [cite: 34, 55-58]. La rentabilidad real está sujeta a la volatilidad del mercado, la cual es intrínsecamente impredecible.<br><br>
+    Los cálculos mostrados en este simulador son <strong>estimaciones matemáticas basadas en rendimientos históricos</strong> y no garantizan resultados futuros . La rentabilidad real está sujeta a la volatilidad del mercado, la cual es intrínsecamente impredecible.<br><br>
     La <strong>"Zona Cohete"</strong> (Explosive Zone) descrita en la guía representa activos de alto riesgo y debe considerarse como una apuesta especulativa donde es posible la pérdida total o parcial del capital invertido [cite: 48-49]. Nada de lo aquí expuesto constituye una recomendación personalizada de inversión o consejo financiero [cite: 1-2].<br><br>
     Es responsabilidad exclusiva del lector investigar por su cuenta, formarse adecuadamente y actuar bajo su propia responsabilidad. <strong>@InversorEnPrácticas</strong> no se hace responsable de las decisiones financieras tomadas ni de las posibles pérdidas derivadas del uso de esta herramienta o de la guía adjunta.
 </div>
